@@ -1,3 +1,40 @@
+<script>
+  import { onMount } from 'svelte';
+  import { db } from '$lib/firebase';
+  import {
+      collection,
+      updateDoc,
+      doc,
+      arrayUnion,
+      where,
+      query,
+      getDoc,
+      getDocs,
+      onSnapshot
+  } from 'firebase/firestore';
+
+  let blogs = []
+  let loading = false;
+
+  onMount(() => {
+    loading = true;
+    const unsubscribe = onSnapshot(
+      collection(db, "blogs"),
+      (snapshot) => {
+        snapshot.forEach((doc) => {
+          const blog = doc.data();
+          blogs.push(blog)
+          loading = false;
+        });
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  });
+</script>
+
 <nav class="border-gray-200 bg-gray-50">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <a href="#" class="flex items-center">
@@ -89,112 +126,34 @@
         </div>
     </div>
     <div class="container items-center px-5 pb-12 mx-auto lg:px-24">
-      <div class="flex flex-wrap -m-4">
-        <div class="w-full p-4 md:w-1/2 lg:w-1/3">
-          <div class="h-full overflow-hidden rounded-lg shadow-xl">
-            <img class="object-cover object-center w-full lg:h-48 md:h-36" src="https://images.pexels.com/photos/18770339/pexels-photo-18770339/free-photo-of-an-old-mosque-with-a-clock-tower-in-the-desert.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt="unicornsfeed newsletter - Issue Nasd - asdf" />
-            <div class="content-around p-6">
-              <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-400 title-font">
-                Science & Math
-              </h2>
-              <h3 class="mb-3 text-lg font-bold text-gray-900 title-font dark:text-white">
-                Why you get no bitches!!!
-              </h3>
-              <p class="mb-3 leading-relaxed lg:line-clamp-2 dark:text-gray-400">You don't get any bitches because you talk down to women.</p>
-              <div class="flex flex-wrap items-center">
-                <a href="./issue-n1.html"
-                  class="inline-flex items-center px-6 py-3 mt-4 text-lg font-semibold text-gray-600 transition duration-500 ease-in-out border rounded-lg hover:bg-gray-200 md:mb-2 lg:mb-0 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:bg-gray-600">Read
-                  more &nbsp; »
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-full p-4 md:w-1/2 lg:w-1/3">
-            <div class="h-full overflow-hidden rounded-lg shadow-xl">
-              <img class="object-cover object-center w-full lg:h-48 md:h-36" src="https://images.pexels.com/photos/18770339/pexels-photo-18770339/free-photo-of-an-old-mosque-with-a-clock-tower-in-the-desert.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="unicornsfeed newsletter - Issue Nasd - asdf" />
-              <div class="content-around p-6">
-                <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-400 title-font">
-                  Science & Math
-                </h2>
-                <h3 class="mb-3 text-lg font-bold text-gray-900 title-font dark:text-white">
-                  Why you get no bitches!!!
-                </h3>
-                <p class="mb-3 leading-relaxed lg:line-clamp-2 dark:text-gray-400">You don't get any bitches because you talk down to women.</p>
-                <div class="flex flex-wrap items-center">
-                  <a href="./issue-n1.html"
-                    class="inline-flex items-center px-6 py-3 mt-4 text-lg font-semibold text-gray-600 transition duration-500 ease-in-out border rounded-lg hover:bg-gray-200 md:mb-2 lg:mb-0 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:bg-gray-600">Read
-                    more &nbsp; »
-                  </a>
+      <div class="w-full flex flex-wrap -m-4">
+        {#if loading === false}
+          {#each blogs as blog}
+            <div class="w-full p-4 md:w-1/2 lg:w-1/3"> <!--Blog Start-->
+              <div class="h-full overflow-hidden rounded-lg shadow-xl">
+                <img class="object-cover object-center w-full lg:h-48 md:h-36" src="{blog.thumbnail}"
+                  alt="unicornsfeed newsletter - Issue Nasd - asdf" />
+                <div class="content-around p-6">
+                  <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-400 title-font">
+                    {blog.category}
+                  </h2>
+                  <h3 class="mb-3 text-lg font-bold text-gray-900 title-font dark:text-white">
+                    {blog.title}
+                  </h3>
+                  <p class="mb-3 leading-relaxed lg:line-clamp-2 dark:text-gray-400">{blog.hook}</p>
+                  <div class="flex flex-wrap items-center">
+                    <a href="./issue-n1.html"
+                      class="inline-flex items-center px-6 py-3 mt-4 text-lg font-semibold text-gray-600 transition duration-500 ease-in-out border rounded-lg hover:bg-gray-200 md:mb-2 lg:mb-0 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:bg-gray-600">Read
+                      more &nbsp; »
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="w-full p-4 md:w-1/2 lg:w-1/3">
-            <div class="h-full overflow-hidden rounded-lg shadow-xl">
-              <img class="object-cover object-center w-full lg:h-48 md:h-36" src="https://images.pexels.com/photos/18770339/pexels-photo-18770339/free-photo-of-an-old-mosque-with-a-clock-tower-in-the-desert.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="unicornsfeed newsletter - Issue Nasd - asdf" />
-              <div class="content-around p-6">
-                <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-400 title-font">
-                  Science & Math
-                </h2>
-                <h3 class="mb-3 text-lg font-bold text-gray-900 title-font dark:text-white">
-                  Why you get no bitches!!!
-                </h3>
-                <p class="mb-3 leading-relaxed lg:line-clamp-2 dark:text-gray-400">You don't get any bitches because you talk down to women.</p>
-                <div class="flex flex-wrap items-center">
-                  <a href="./issue-n1.html"
-                    class="inline-flex items-center px-6 py-3 mt-4 text-lg font-semibold text-gray-600 transition duration-500 ease-in-out border rounded-lg hover:bg-gray-200 md:mb-2 lg:mb-0 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:bg-gray-600">Read
-                    more &nbsp; »
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-full p-4 md:w-1/2 lg:w-1/3">
-            <div class="h-full overflow-hidden rounded-lg shadow-xl">
-              <img class="object-cover object-center w-full lg:h-48 md:h-36" src="https://images.pexels.com/photos/18770339/pexels-photo-18770339/free-photo-of-an-old-mosque-with-a-clock-tower-in-the-desert.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="unicornsfeed newsletter - Issue Nasd - asdf" />
-              <div class="content-around p-6">
-                <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-400 title-font">
-                  Science & Math
-                </h2>
-                <h3 class="mb-3 text-lg font-bold text-gray-900 title-font dark:text-white">
-                  Why you get no bitches!!!
-                </h3>
-                <p class="mb-3 leading-relaxed lg:line-clamp-2 dark:text-gray-400">You don't get any bitches because you talk down to women.</p>
-                <div class="flex flex-wrap items-center">
-                  <a href="./issue-n1.html"
-                    class="inline-flex items-center px-6 py-3 mt-4 text-lg font-semibold text-gray-600 transition duration-500 ease-in-out border rounded-lg hover:bg-gray-200 md:mb-2 lg:mb-0 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:bg-gray-600">Read
-                    more &nbsp; »
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-full p-4 md:w-1/2 lg:w-1/3">
-            <div class="h-full overflow-hidden rounded-lg shadow-xl">
-              <img class="object-cover object-center w-full lg:h-48 md:h-36" src="https://images.pexels.com/photos/18770339/pexels-photo-18770339/free-photo-of-an-old-mosque-with-a-clock-tower-in-the-desert.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="unicornsfeed newsletter - Issue Nasd - asdf" />
-              <div class="content-around p-6">
-                <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-400 title-font">
-                  Science & Math
-                </h2>
-                <h3 class="mb-3 text-lg font-bold text-gray-900 title-font dark:text-white">
-                  Why you get no bitches!!!
-                </h3>
-                <p class="mb-3 leading-relaxed lg:line-clamp-2 dark:text-gray-400">You don't get any bitches because you talk down to women.</p>
-                <div class="flex flex-wrap items-center">
-                  <a href="./issue-n1.html"
-                    class="inline-flex items-center px-6 py-3 mt-4 text-lg font-semibold text-gray-600 transition duration-500 ease-in-out border rounded-lg hover:bg-gray-200 md:mb-2 lg:mb-0 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:bg-gray-600">Read
-                    more &nbsp; »
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+            </div> <!--Blog End-->
+          {/each}
+        {:else if loading === true}
+          <h1>Loading</h1>
+        {/if}
       </div>
     </div>
   </section>
