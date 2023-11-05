@@ -10,11 +10,17 @@
       query,
       getDoc,
       getDocs,
-      onSnapshot
+      onSnapshot,
+
+      addDoc
+
   } from 'firebase/firestore';
 
   let blogs = []
   let loading = false;
+  let categories = [];
+  let categoryData = {};
+  let email;
 
   onMount(() => {
     loading = true;
@@ -23,16 +29,33 @@
       (snapshot) => {
         snapshot.forEach((doc) => {
           const blog = doc.data();
-          blogs.push(blog)
+          blog["id"] = doc.id;
+          blogs.push(blog);
           loading = false;
         });
       }
     );
 
+    const docRef = doc(db, "categories", "allCategories");
+    getDoc(docRef).then(res=>{
+        categoryData = res.data();
+        console.log(categoryData)
+        for(let property in categoryData){
+            categories.push(property);
+            categories = categories;
+        }
+    })
+
     return () => {
       unsubscribe();
     };
   });
+
+  const subscribe = async () => {
+    await addDoc(collection(db, "subscribers"), {
+      email: email,
+    });
+  }
 </script>
 
 <nav class="border-gray-200 bg-gray-50">
@@ -66,13 +89,13 @@
   </nav>
   
 
-<section class="bg-blue-200 text-gray-500">
+<section class="text-gray-500 bg-gray-200">
     <div class="container flex flex-col items-center px-5 py-24 mx-auto md:flex-row lg:px-24">
       <div class="flex flex-col items-center mb-16 text-left lg:flex-grow lg:w-1/2 lg:pr-24 md:items-start md:mb-0">
         <div class="flex flex-col w-full mb-8 lg:flex-grow md:items-start">
-          <span class="mb-4 text-sm font-semibold text-gray-600 uppercase dark:text-white">1600+ Subscribers</span>
+          <span class="mb-4 text-sm font-semibold text-gray-600 uppercase">1600+ Subscribers</span>
           <h1
-            class="mb-4 text-5xl font-bold leading-none tracking-tight text-black md:text-7xl 2xl:text-6xl lg:text-5xl title-font dark:text-gray-400">
+            class="mb-4 text-5xl font-bold leading-none tracking-tight text-black md:text-7xl 2xl:text-6xl lg:text-5xl title-font">
             A daily newsletter with fantatic content on all genres. From the one and only DKILLER982
           </h1>
         </div>
@@ -94,10 +117,10 @@
               </div>
               <div class="text-center emailoctopus-form-row-subscribe">
                 <input
-                  class="w-full px-4 py-2 mb-4 text-base text-center text-gray-500 transition duration-500 ease-in-out transform bg-white border border-transparent border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
-                  id="field_0" name="field_0" type="email" placeholder="email@example.com" required="required" />
+                  bind:value={email} class="w-full px-4 py-2 mb-4 text-base text-center text-gray-500 transition duration-500 ease-in-out transform bg-white border border-transparent border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
+                  id="field_0" name="field_0" type="email" placeholder="kimJounUn@north.korea.gov" required="required" />
                 <input type="hidden" name="successRedirectUrl" />
-                <button type="submit"
+                <button on:click={subscribe}
                   class="sub w-full px-4 py-2 text-lg tracking-wide text-gray-100 transition duration-500 ease-in-out transform bg-black border-blue-600 rounded-md">
                   Subscribe
                 </button>
@@ -109,40 +132,37 @@
         </div>
       </div>
       <div class="hidden w-5/6 lg:max-w-lg lg:w-full md:w-1/2 lg:block">
-        <img class="object-cover object-center rounded" alt="hero"
-          src="https://d33wubrfki0l68.cloudfront.net/8a6d68f2c8f7121df4effaf66d0c742d0109ce64/afbdc/images/4.webp" />
+        <img class="object-cover object-center rounded-lg" alt="hero"
+          src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41477-019-0374-3/MediaObjects/41477_2019_374_Figa_HTML.jpg" />
       </div>
     </div>
   </section>
-  <section class="text-gray-500 bg-blue-200">
-    <div class="w-full flex-grow sm:flex sm:items-center sm:w-auto mb-10">
-        <div class="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-2">
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Technology</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Automotive</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Finance</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Politics</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Culture</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Sports</a>
-        </div>
-    </div>
+  <section class="text-gray-500 bg-gray-100">
+    <div class="w-full flex-grow sm:flex sm:items-center sm:w-auto">
+      <div class="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-8">
+          {#each categories as category}
+              <a href="{categoryData[category]}" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">{category}</a>
+          {/each}
+      </div>
+  </div>
     <div class="container items-center px-5 pb-12 mx-auto lg:px-24">
       <div class="w-full flex flex-wrap -m-4">
         {#if loading === false}
           {#each blogs as blog}
             <div class="w-full p-4 md:w-1/2 lg:w-1/3"> <!--Blog Start-->
-              <div class="h-full overflow-hidden rounded-lg shadow-xl">
-                <img class="object-cover object-center w-full lg:h-48 md:h-36" src="{blog.thumbnail}"
+              <div class="h-full overflow-hidden rounded-lg shadow-xl ">
+                <img class="object-cover object-center w-full lg:h-48 md:h-36" src="{blog.img || ""}"
                   alt="unicornsfeed newsletter - Issue Nasd - asdf" />
                 <div class="content-around p-6">
-                  <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-400 title-font">
+                  <h2 class="mb-1 font-mono text-xs font-medium tracking-widest text-gray-500 title-font">
                     {blog.category}
                   </h2>
-                  <h3 class="mb-3 text-lg font-bold text-gray-900 title-font dark:text-white">
+                  <h3 class="mb-3 text-lg font-bold text-gray-900 title-font">
                     {blog.title}
                   </h3>
-                  <p class="mb-3 leading-relaxed lg:line-clamp-2 dark:text-gray-400">{blog.hook}</p>
+                  <p class="mb-3 leading-relaxed lg:line-clamp-2">{blog.hook}</p>
                   <div class="flex flex-wrap items-center">
-                    <a href="./issue-n1.html"
+                    <a href="/article/{blog.id}"
                       class="inline-flex items-center px-6 py-3 mt-4 text-lg font-semibold text-gray-600 transition duration-500 ease-in-out border rounded-lg hover:bg-gray-200 md:mb-2 lg:mb-0 hover:text-gray-900 dark:border-gray-600 dark:text-white dark:bg-gray-600">Read
                       more &nbsp; »
                     </a>

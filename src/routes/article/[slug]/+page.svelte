@@ -1,3 +1,52 @@
+<script>
+    import { page } from "$app/stores";
+    import {db} from "$lib/firebase"
+    import {
+      collection,
+      updateDoc,
+      doc,
+      arrayUnion,
+      where,
+      query,
+      getDoc,
+      getDocs,
+      onSnapshot
+    } from "firebase/firestore";
+
+
+    let slug = $page.params.slug;
+    let data = {
+        content: "",
+        hook: "",
+        title: ""
+    };
+    let loading = false;
+    let categories = [];
+    let categoryData = {};
+
+    if(slug){
+        loading = true;
+        const docRef = doc(db, "blogs", slug);
+        getDoc(docRef).then(res=>{
+            data = res.data();
+        })
+        
+        loading = false;
+    }
+
+    const docRef = doc(db, "categories", "allCategories");
+    getDoc(docRef).then(res=>{
+        categoryData = res.data();
+        console.log(categoryData)
+        for(let property in categoryData){
+            categories.push(property);
+            categories = categories;
+        }
+    })
+    
+
+</script>
+
 <nav class="w-full py-4 bg-blue-800 shadow">
     <div class="w-full container mx-auto flex flex-wrap items-center justify-between">
 
@@ -51,12 +100,9 @@
     </div>
     <div class="w-full flex-grow sm:flex sm:items-center sm:w-auto">
         <div class="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-2">
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Technology</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Automotive</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Finance</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Politics</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Culture</a>
-            <a href="#" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">Sports</a>
+            {#each categories as category}
+                <a href="{categoryData[category]}" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">{category}</a>
+            {/each}
         </div>
     </div>
 </nav>
@@ -78,37 +124,10 @@
                         </div>
                     </div>
                 </address>
-                <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">Best practices for successful prototypes</h1>
+                <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">{data.title}</h1>
             </header>
-            <p class="text-2xl mb-6 font-medium">Flowbite is an open-source library of UI components built with the utility-first
-                classes from Tailwind CSS. It also includes interactive elements such as dropdowns, modals,
-                datepickers.</p>
-            <p class="articleP">Before going digital, you might benefit from scribbling down some ideas in a sketchbook. This way,
-                you can think things through before committing to an actual design project.</p>
-            <p class="articleP">But then I found a <a href="https://flowbite.com">component library based on Tailwind CSS called
-                    Flowbite</a>. It comes with the most commonly used UI components, such as buttons, navigation
-                bars, cards, form elements, and more which are conveniently built with the utility classes from
-                Tailwind CSS.</p>
-            <figure class="my-8"><img src="https://flowbite.s3.amazonaws.com/typography-plugin/typography-image-1.png" alt="">
-                <figcaption class="mt-2">Digital art by Yo Mama</figcaption>
-            </figure>
-            <h2>Getting started with Flowbite</h2>
-            <p class="articleP">First of all you need to understand how Flowbite works. This library is not another framework.
-                Rather, it is a set of components based on Tailwind CSS that you can just copy-paste from the
-                documentation.</p>
-            <p class="articleP">It also includes a JavaScript file that enables interactive components, such as modals, dropdowns,
-                and datepickers which you can optionally include into your project via CDN or NPM.</p>
-            <p class="articleP">You can check out the <a href="https://flowbite.com/docs/getting-started/quickstart/">quickstart
-                    guide</a> to explore the elements by including the CDN files into your project. But if you want
-                to build a project with Flowbite I recommend you to follow the build tools steps so that you can
-                purge and minify the generated CSS.</p>
-            <p class="articleP">You'll also receive a lot of useful application UI, marketing UI, and e-commerce pages that can help
-                you get started with your projects even faster. You can check out this <a
-                    href="https://flowbite.com/docs/components/tables/">comparison table</a> to better understand
-                the differences between the open-source and pro version of Flowbite.</p>
-            <h2>When does design come in handy?</h2>
-            <p class="articleP">While it might seem like extra work at a first glance, here are some key moments in which prototyping
-                will come in handy:</p>
+            <p class="text-2xl mb-6 font-medium">{data.hook}</p>
+            {@html data.content}
            
             
             <section class="not-format">

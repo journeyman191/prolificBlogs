@@ -19,6 +19,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tinymce/tinymce-svelte": "^1.0.1",
+		"@vercel/analytics": "^1.1.1",
 		"firebase": "^10.5.0"
 	}
 }

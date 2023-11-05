@@ -1,6 +1,6 @@
 <script>
     import Editor from "@tinymce/tinymce-svelte";
-    import { setDoc, doc, addDoc, collection, updateDoc } from 'firebase/firestore';
+    import { setDoc, doc, addDoc, collection, updateDoc, getDoc } from 'firebase/firestore';
     import { serverTimestamp } from 'firebase/firestore';
     import { db } from '$lib/firebase';
 
@@ -31,6 +31,7 @@
         hook: "",
         keywords: "daring",
         content: value,
+        img: ""
     }
 
     let conf = {
@@ -70,7 +71,6 @@
             alert("There was an unexpected error", err);
         }
     }
-
 //ADD PLACE FOR THUMBNAIL
 </script>
 
@@ -100,6 +100,13 @@
                 <label for="hook" class="block text-sm font-medium leading-6 text-gray-900">What is the irresistible hook?</label>
                 <div class="relative mt-2 rounded-md shadow-sm">
                     <input bind:value={blog.hook} type="text" name="hook" id="hook" class="text-sm block w-full rounded-md border-0 pt-2.5 pb-14 pl-3 pr-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:leading-6 placeholder:whitespace-normal" placeholder="John got paid $500 in one weekend after he changed one small thing about his lawncare business.">
+                </div>
+            </div>
+
+            <div class="w-2/3 mb-4">
+                <label for="img" class="block text-sm font-medium leading-6 text-gray-900">Add an Image link?</label>
+                <div class="relative mt-2 rounded-md shadow-sm">
+                    <input bind:value={blog.img} type="text" name="img" id="img" class="text-sm block w-full rounded-md border-0 py-2.5 pl-3 pr-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:leading-6 placeholder:whitespace-normal" placeholder="">
                 </div>
             </div>
         
