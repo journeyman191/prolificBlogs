@@ -1,10 +1,18 @@
 <script>
   import { onMount } from "svelte";
+  
 
   let username;
   let password;
 
-  let login;
+  const login = () =>{
+    if(username === "Dillan782" && password === "lilDillyBoy"){
+      localStorage.setItem("loggedIn", "Adminyessir");
+      window.location.href = "/post";
+    }else{
+      alert("Incorrect Username/Password")
+    }
+  }
   
 </script>
 
