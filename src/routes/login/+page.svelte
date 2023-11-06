@@ -5,17 +5,6 @@
   let password;
 
   let login;
-
-  onMount(()=>{
-    login = () =>{
-    if(username === "dillanLilD" && password === "littleDilly"){
-      cookies.set('user', "adminLoggedIn", {
-        maxAge: 60 * 60 * 24 * 30
-      });
-    }
-  }
-  })
-
   
 </script>
 

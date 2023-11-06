@@ -29,6 +29,7 @@
         const docRef = doc(db, "blogs", slug);
         getDoc(docRef).then(res=>{
             data = res.data();
+            console.log(data)
         })
         
         loading = false;

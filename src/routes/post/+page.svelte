@@ -30,7 +30,7 @@
         category: "",
         hook: "",
         keywords: "daring",
-        content: value,
+        content: "", //Gets filled in on submit
         img: ""
     }
 
@@ -61,11 +61,12 @@
             return;
         }
 
-        if(!blog.content){
+        if(!value){
             alert("Please create a blog");
             return;
         }
         try{
+            blog.content =  value;
             await addDoc(collection(db, "blogs"), blog);
         }catch(err){
             alert("There was an unexpected error", err);
@@ -123,7 +124,7 @@
 
     <div class="w-full md:w-1/2 px-10 pt-10">
         <div class="rounded-md shadow-sm">
-            <Editor apiKey="6bonds4k9gcv6r9duxe2mgtgf6zovqhix4qglxzkkppws98h" {conf} bind:value/>
+            <Editor apiKey="6bonds4k9gcv6r9duxe2mgtgf6zovqhix4qglxzkkppws98h" {conf} bind:value={value}/>
         </div>
     </div>
 </div>
