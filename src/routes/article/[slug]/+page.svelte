@@ -10,7 +10,9 @@
       query,
       getDoc,
       getDocs,
-      onSnapshot
+      onSnapshot,
+      orderBy,
+      limit
     } from "firebase/firestore";
 
 
@@ -20,9 +22,13 @@
         hook: "",
         title: ""
     };
+
+
     let loading = false;
     let categories = [];
     let categoryData = {};
+    let otherArticles = []
+
 
     if(slug){
         loading = true;
@@ -44,7 +50,30 @@
             categories = categories;
         }
     })
-    
+
+    let blogQuery = query(collection(db, "blogs"));
+    blogQuery = query(
+        blogQuery,
+        orderBy("timestamp", "desc"),
+        limit(4)
+    );
+
+    getDocs(blogQuery).then(res => {
+        for(let article of res.docs){
+            let articleItem = article.data();
+            articleItem.id = article.id;
+            otherArticles.push(articleItem);
+            otherArticles = otherArticles;
+        }
+    })
+
+    const shortenHook = (str) =>{
+        const regex = /(?<=[.!?])/; 
+        str.split(regex);
+        const sentences = str.split(regex);
+        const firstTwoSentences = sentences.slice(0, 2);
+        return(firstTwoSentences);
+    }
 
 </script>
 
@@ -130,7 +159,7 @@
             <p class="text-2xl mb-6 font-medium">{data.hook}</p>
             {@html data.content}
            
-            
+        <!--
             <section class="not-format">
                 <div class="flex justify-between items-center mb-6 mt-12">
                     <h2 class="text-lg lg:text-2xl font-bold text-gray-900">Discussion (20)</h2>
@@ -165,7 +194,7 @@
                               </svg>
                             <span class="sr-only">Comment settings</span>
                         </button>
-                        <!-- Dropdown menu -->
+                        
                         <div id="dropdownComment1"
                             class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow">
                             <ul class="py-1 text-sm text-gray-700"
@@ -216,7 +245,7 @@
                               </svg>
                             <span class="sr-only">Comment settings</span>
                         </button>
-                        <!-- Dropdown menu -->
+                        
                         <div id="dropdownComment2"
                             class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                             <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -265,7 +294,7 @@
                               </svg>
                             <span class="sr-only">Comment settings</span>
                         </button>
-                        <!-- Dropdown menu -->
+                        
                         <div id="dropdownComment3"
                             class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                             <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -313,7 +342,7 @@
                                   <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
                               </svg>
                         </button>
-                        <!-- Dropdown menu -->
+                        
                         <div id="dropdownComment4"
                             class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                             <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -344,66 +373,33 @@
                         </button>
                     </div>
                 </article>
-
+            </section>
+        -->
         </article>
     </div>
 
+
+
   
-  <aside aria-label="Related articles" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
+  <aside aria-label="Related articles" class="py-8 lg:py-24 bg-gray-50">
     <div class="px-4 mx-auto max-w-screen-xl">
-        <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Related articles</h2>
-        <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-            <article class="max-w-xs">
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png" class="mb-5 rounded-lg" alt="Image 1">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">Our first office</a>
-                </h2>
-                <p class="mb-4 text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read in 2 minutes
-                </a>
-            </article>
-            <article class="max-w-xs">
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png" class="mb-5 rounded-lg" alt="Image 2">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">Enterprise design tips</a>
-                </h2>
-                <p class="mb-4  text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read in 12 minutes
-                </a>
-            </article>
-            <article class="max-w-xs">
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-3.png" class="mb-5 rounded-lg" alt="Image 3">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">We partnered with Google</a>
-                </h2>
-                <p class="mb-4  text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read in 8 minutes
-                </a>
-            </article>
-            <article class="max-w-xs">
-                <a href="#">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-4.png" class="mb-5 rounded-lg" alt="Image 4">
-                </a>
-                <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                    <a href="#">Our first project with React</a>
-                </h2>
-                <p class="mb-4  text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-                <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read in 4 minutes
-                </a>
-            </article>
-
-
-        
+        <h2 class="text-2xl font-bold text-gray-900">Other interesting articles</h2>
+        <div class="mt-10 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+            {#each otherArticles as article}
+                <article class="max-w-xs">
+                    <a href="#">
+                        <img src={article.img} class="mb-5 rounded-lg" alt="Image 1">
+                    </a>
+                    <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
+                        <a href="#">{article.title}</a>
+                    </h2>
+                    <p class="mb-4 text-gray-500 dark:text-gray-400">{shortenHook(article.hook)}</p>
+                    <a href="/article/{article.id}" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 hover:no-underline">
+                        Read in {Math.floor(Math.random() * 8) + 2} minutes
+                    </a>
+                </article>
+            {/each}
+        </div>
     </aside>
 
     <style>

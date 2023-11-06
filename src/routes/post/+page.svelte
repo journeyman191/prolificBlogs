@@ -31,7 +31,8 @@
         hook: "",
         keywords: "daring",
         content: "", //Gets filled in on submit
-        img: ""
+        img: "",
+        timestamp: "", //Gets filled in on submit
     }
 
     let conf = {
@@ -67,6 +68,7 @@
         }
         try{
             blog.content =  value;
+            blog.timestamp = serverTimestamp();
             await addDoc(collection(db, "blogs"), blog);
         }catch(err){
             alert("There was an unexpected error", err);
