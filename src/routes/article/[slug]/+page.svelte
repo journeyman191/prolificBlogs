@@ -14,6 +14,7 @@
       orderBy,
       limit
     } from "firebase/firestore";
+    import icon from "$lib/assets/icon.jpg"
 
 
     let slug = $page.params.slug;
@@ -75,32 +76,43 @@
         return(firstTwoSentences);
     }
 
+    function formatTimestamp(timestamp) {
+        if(timestamp){
+            return timestamp.toDate().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+    }
+
 </script>
 
 <nav class="w-full py-4 bg-blue-800 shadow">
-    <div class="w-full container mx-auto flex flex-wrap items-center justify-between">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between py-2">
+        <!--
+            <nav>
+                <ul class="flex items-center justify-between font-bold text-sm text-white uppercase no-underline">
+                    <li><a class="hover:text-gray-200 hover:underline px-4" href="#">Shop</a></li>
+                    <li><a class="hover:text-gray-200 hover:underline px-4" href="#">About</a></li>
+                </ul>
+            </nav>
 
-        <nav>
-            <ul class="flex items-center justify-between font-bold text-sm text-white uppercase no-underline">
-                <li><a class="hover:text-gray-200 hover:underline px-4" href="#">Shop</a></li>
-                <li><a class="hover:text-gray-200 hover:underline px-4" href="#">About</a></li>
-            </ul>
-        </nav>
-
-        <div class="flex items-center text-lg no-underline text-white pr-6">
-            <a class="" href="#">
-                <i class="fab fa-facebook"></i>
-            </a>
-            <a class="pl-6" href="#">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a class="pl-6" href="#">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a class="pl-6" href="#">
-                <i class="fab fa-linkedin"></i>
-            </a>
-        </div>
+            <div class="flex items-center text-lg no-underline text-white pr-6">
+                <a class="" href="#">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a class="pl-6" href="#">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+        -->
     </div>
 
 </nav>
@@ -109,10 +121,10 @@
 <header class="w-full container mx-auto">
     <div class="flex flex-col items-center py-12">
         <a class="font-bold text-gray-800 uppercase hover:text-gray-700 text-5xl" href="#">
-            DKILLER'S BLOG
+            Prolific Blogs
         </a>
         <p class="text-lg text-gray-600">
-            "I'm out of town thuggin wit my rounds, my coochie pink..."🎶
+            "Learn, grow, explore, expand." 📚🌱
         </p>
     </div>
 </header>
@@ -131,7 +143,7 @@
     <div class="w-full flex-grow sm:flex sm:items-center sm:w-auto">
         <div class="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-2">
             {#each categories as category}
-                <a href="{categoryData[category]}" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">{category}</a>
+                <a href="" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">{category}</a>
             {/each}
         </div>
     </div>
@@ -145,16 +157,16 @@
         <article class="main w-full max-w-4xl">
             <header class="mb-4 lg:mb-6">
                 <address class="flex items-center mb-6">
-                    <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-                        <img class="w-16 h-16 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-2.jpg" alt="Jese Leos">
-                        <div>
-                            <a href="#" rel="author" class="text-xl font-bold text-gray-900 dark:text-white">Jese Leos</a>
-                            <p class="text-base text-gray-500 dark:text-gray-400">Graphic Designer, educator & CEO Flowbite</p>
-                            <p class="text-base text-gray-500 dark:text-gray-400"><time pubdate datetime="2022-02-08" title="February 8th, 2022">Feb. 8, 2022</time></p>
+                    <div class="inline-flex items-center mr-3 text-sm text-gray-900">
+                        <img class="w-16 h-16 aspect-auto rounded-full" src={icon} alt="Jese Leos">
+                        <div class="ml-4">
+                            <a href="#" rel="author" class="text-xl font-bold text-gray-900">Dillan Garner</a>
+                            <p class="text-base text-gray-500">CPCC Student, public speaker & tutor</p>
+                            <p class="text-base text-gray-500"><time pubdate datetime="2022-02-08" title="February 8th, 2022">{formatTimestamp(data.timestamp)}</time></p>
                         </div>
                     </div>
                 </address>
-                <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">{data.title}</h1>
+                <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl">{data.title}</h1>
             </header>
             <p class="text-2xl mb-6 font-medium">{data.hook}</p>
             {@html data.content}

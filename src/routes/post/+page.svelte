@@ -40,6 +40,16 @@
         content_style: "h2{             font-size: 1.8rem;             color: rgb(46, 46, 46);             font-weight: 700;             margin-top: 1rem;             margin-bottom: 0.5rem;         }          .articleP{             color: rgb(46, 46, 46);             font-size: 1.3rem;             font-weight: 350;         }",
     }
 
+    let modalOpen = true;
+
+    let openModal = () =>{
+        modalOpen = true;
+    }
+
+    let closeModal = () =>{
+        modalOpen = false;
+    }
+
     const post = async ()=>{
         console.log(blog)
         if(!blog.title){
@@ -70,6 +80,7 @@
             blog.content =  value;
             blog.timestamp = serverTimestamp();
             await addDoc(collection(db, "blogs"), blog);
+            modalOpen = true;
         }catch(err){
             alert("There was an unexpected error", err);
         }
@@ -79,6 +90,15 @@
 
 
 <div class="w-screen h-screen flex flex-wrap">
+    {#if modalOpen}
+        <div class="modal-container">
+            <div class="modal rounded-3xl z-50 bg-gray-400 fullOpacity absolute w-5/6 md:w-4/6 lg:w-1/2 xl:w-1/3 h-1/2 top-1/2 -translate-y-1/2 px-5 py-6 flex flex-col gap-1 items-center">
+                <p class="text-white text-5xl md:text-6xl mb-6 mt-16">Article Posted Sucessfully!</p>
+                <p class="text-gray-100 text-xl md:text-2xl">Yessirrrrrr! Another one up for the people</p>
+                <button class="shadow-2xl absolute bottom-6 right-8 bg-gray-500 text-white transform p-4 rounded-xl self-end font-semibold" on:click={closeModal}>Close</button>
+            </div>
+        </div>
+    {/if}
     <div class="w-full md:w-1/2">
         <div class="mt-16 md:mt-28 lg:mt-40 flex flex-col justify-center items-center mb-10">
             <h1 class="mb-1 md:mx-0 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Create a Blog</h1>
@@ -130,4 +150,33 @@
         </div>
     </div>
 </div>
+
+<style>
+
+    .modal-container{
+        position: fixed;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* Semi-transparent black background for the blur */
+        backdrop-filter: blur(5px); /* Add a blur effect to the background */
+        justify-content: center;
+        align-items: center;
+        z-index: 50;
+    }
+
+    .modal-container div{
+        z-index: 51;
+    }
+
+    .closed{
+        justify-content: flex-end;
+        margin-bottom: 0.5%;
+        margin-top: -4%;
+    }
+
+    .closed p{
+        display: none;
+    }
+</style>
 
