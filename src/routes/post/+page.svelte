@@ -40,7 +40,7 @@
         content_style: "h2{             font-size: 1.8rem;             color: rgb(46, 46, 46);             font-weight: 700;             margin-top: 1rem;             margin-bottom: 0.5rem;         }          .articleP{             color: rgb(46, 46, 46);             font-size: 1.3rem;             font-weight: 350;         }",
     }
 
-    let modalOpen = true;
+    let modalOpen = false;
 
     let openModal = () =>{
         modalOpen = true;
