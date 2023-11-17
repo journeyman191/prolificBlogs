@@ -158,7 +158,7 @@
             <header class="mb-4 lg:mb-6">
                 <address class="flex items-center mb-6">
                     <div class="inline-flex items-center mr-3 text-sm text-gray-900">
-                        <img class="w-16 h-16 aspect-auto rounded-full" src="https://image.mymixtapez.com/albums/217977/cover/0/large" alt="Jese Leos">
+                        <!--<img class="w-16 h-16 aspect-auto rounded-full" src="https://image.mymixtapez.com/albums/217977/cover/0/large" alt="Jese Leos">-->
                         <div class="ml-4">
                             <a href="#" rel="author" class="text-xl font-bold text-gray-900">The Prolific Blogger</a>
                             <p class="text-base text-gray-500">College Student, public speaker & tutor</p>
