@@ -141,14 +141,16 @@
       </div>
     </div>
   </section>
-  <section class="text-gray-500 bg-gray-100">
+  <section class="text-gray-500 bg-gray-100">\
+    <!--
     <div class="w-full flex-grow sm:flex sm:items-center sm:w-auto">
       <div class="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-8">
           {#each categories as category}
               <a href="{categoryData[category]}" class="hover:bg-gray-400 rounded py-2 px-4 mx-2">{category}</a>
           {/each}
       </div>
-  </div>
+    </div>
+    -->
     <div class="container items-center px-5 pb-12 mx-auto lg:px-24">
       <div class="w-full flex flex-wrap -m-4">
         {#if loading === false}
