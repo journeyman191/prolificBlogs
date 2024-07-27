@@ -16,6 +16,8 @@
 
   } from 'firebase/firestore';
 
+  import sciLogo from "$lib/assets/IMG_2541.jpg";
+
   let blogs = []
   let loading = false;
   let categories = [];
@@ -137,7 +139,7 @@
       </div>
       <div class="hidden w-5/6 lg:max-w-lg lg:w-full md:w-1/2 lg:block">
         <img class="object-cover object-center rounded-lg" alt="hero"
-          src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41477-019-0374-3/MediaObjects/41477_2019_374_Figa_HTML.jpg" />
+          src={sciLogo} />
       </div>
     </div>
   </section>

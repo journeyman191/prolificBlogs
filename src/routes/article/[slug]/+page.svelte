@@ -1,5 +1,7 @@
 <script>
     import { page } from "$app/stores";
+    import { goto } from '$app/navigation';
+    import { browser } from '$app/environment';
     import {db} from "$lib/firebase";
     import {
       collection,
@@ -37,7 +39,12 @@
         const docRef = doc(db, "blogs", slug);
         getDoc(docRef).then(res=>{
             data = res.data();
-            console.log(data)
+            console.log(data, "data")
+            if(data === undefined){
+                if (browser) {
+                    goto('/');
+                }
+            }
         })
         
         loading = false;
@@ -130,6 +137,7 @@
 </header>
 
 <!-- Topic Nav -->
+ <!--
 <nav class="w-full py-4 border-t border-b bg-gray-100" >
     <div class="block sm:hidden">
         <a
@@ -148,6 +156,7 @@
         </div>
     </div>
 </nav>
+-->
 
 
 <div class="w-screen flex items-center justify-center py-6">
